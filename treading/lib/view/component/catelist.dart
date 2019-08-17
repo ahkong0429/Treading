@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:treading/config/const.dart';
+import 'package:treading/controller/loading.dart';
 import 'package:treading/model/book.dart';
 import 'package:treading/controller/category.dart';
 import 'package:treading/model/category.dart';
@@ -16,9 +17,12 @@ class CateList extends StatelessWidget {
             FadeInImage.memoryNetwork(
               placeholder: kTransparentImage,
               image: Config.HOST + f.thumb,
-              height: 220,
+              height: 210,
             ),
-            Text(f.title),
+            Text(
+              f.title,
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ));
@@ -29,7 +33,9 @@ class CateList extends StatelessWidget {
         children: <Widget>[Text("加载更多")],
       ),
       onTap: () async {
-        CategoryController.nextPage(context);
+        LoadingController.setLoading(context);
+        await CategoryController.nextPage(context);
+        LoadingController.endLoading(context);
       },
     ));
     return list;
